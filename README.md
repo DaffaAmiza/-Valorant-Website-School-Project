@@ -1,2 +1,17 @@
 # -Valorant-Website-School-Project
 by : Me
+
+# VALORANT Archive Protocol
+
+This is a personal, fan-made web project created for educational purposes.
+
+## Disclaimer
+This project is **not affiliated with, endorsed by, or sponsored by Riot Games**. 
+All VALORANT-related media, including images and video links, belong to their respective owners. This project is intended solely as a portfolio/learning task to practice web development skills.
+
+## Source
+All original content can be found on the official VALORANT channels:
+- Official Website: [https://playvalorant.com](https://playvalorant.com)
+- Official YouTube: [https://www.youtube.com/@VALORANT](https://www.youtube.com/@VALORANT)
+
+*I love VALORANT and created this as a tribute to the game's design.*
