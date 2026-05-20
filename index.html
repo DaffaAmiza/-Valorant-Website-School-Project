@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id-id" class="scroll-smooth">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>VALORANT // ARCHIVE PROTOCOL</title>
+	<link rel="icon" type="image/png" href="img/favicon.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Teko:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vlrntRed: '#ff4655',
+                        vlrntDark: '#11141a',
+                        vlrntLight: '#ece8e1',
+                        vlrntGray: '#7e7e7e',
+                        riotBlack: '#111111',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #11141a;
+            color: #ece8e1;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, .vlrnt-font {
+            font-family: 'Oswald', sans-serif !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .vlrnt-grid-bg {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .vlrnt-tech-circuit {
+            background-image: 
+                radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 16px 16px, 48px 48px, 48px 48px;
+            background-position: center;
+        }
+
+        /* --- BUTTONS --- */
+        .vlrnt-btn-primary {
+            border: 1px solid #ff4655;
+            padding: 12px 36px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 1;
+            color: white;
+            display: inline-block;
+        }
+        .vlrnt-btn-primary::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ff4655;
+            z-index: -1;
+            transition: transform 0.2s ease;
+            transform: scale(1);
+        }
+        .vlrnt-btn-primary:hover::before { transform: scale(0); }
+        .vlrnt-btn-primary:hover { color: #ff4655; }
+
+        .vlrnt-btn-dark {
+            background-color: #11141a;
+            color: white;
+            padding: 14px 40px;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .vlrnt-btn-dark:hover {
+            background-color: #ff4655;
+            border-color: #ff4655;
+        }
+
+        /* --- VIDEO / IFRAME --- */
+        .video-container { position: relative; pointer-events: auto; }
+        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; cursor: pointer; background: transparent; }
+        .thumb-preview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; object-fit: cover; transition: opacity 0.3s ease; }
+        .player-iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+        /* --- 3D COVERFLOW MAP SLIDER --- */
+        .mapsSwiper {
+            width: 100%;
+            padding-top: 50px !important;
+            padding-bottom: 60px !important;
+        }
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 300px;
+        }
+        .map-card {
+            background: #161920;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+		.map-card:hover {
+			border-color: #ff4655 !important;
+			box-shadow: 0 0 35px rgba(255, 70, 85, 0.4);
+			transition: all 0.3s ease;
+		}
+        /* --- INPUT --- */
+        .vlrnt-input {
+            width: 100%;
+            background-color: transparent;
+            border-bottom: 2px solid #ff4655;
+            color: white;
+            padding: 12px 0;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .vlrnt-input:focus { border-color: white; }
+
+        /* --- RIOT NAVIGATION CUSTOM ACTIVE STATE --- */
+        .riot-menu-item {
+            position: relative;
+            transition: all 0.15s ease-in-out;
+        }
+        .riot-menu-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ff4655;
+        }
+    </style>
+</head>
+<body class="vlrnt-grid-bg">   
+    
+    <nav class="fixed top-0 left-0 w-full z-50 bg-[#111111] border-b border-white/10 h-[52px] flex items-center">
+        <div class="container mx-auto px-6 flex justify-between items-center h-full">
+            
+            <div class="flex items-center gap-4 h-full">
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <svg viewBox="0 0 100 35" class="w-6 h-auto fill-current text-white">
+                        <path d="M5 5h15v5H5zm20 0h5v20h-5zm10 0h15v5H35zm0 10h10v5H35z"/>
+                    </svg>
+                    <span class="text-white font-sans font-black text-sm tracking-normal hidden sm:block">RIOT GAMES</span>
+                    <span class="text-[8px] text-[#7e7e7e] ml-0.5">▼</span>
+                </div>
+                
+                <div class="w-[1px] h-4 bg-white/20"></div>
+
+                <div class="flex items-center gap-3 cursor-pointer">
+                    <svg class="h-5 w-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10,25 L45,25 L30,75 L10,75 Z" fill="#ffffff"/>
+                        <path d="M52,25 L85,25 L70,55 L52,25 Z" fill="#ff4655"/>
+                    </svg>
+                    <span class="text-white font-sans font-black text-xs tracking-wider hidden lg:block">VALORANT PROTOCOL</span>
+                </div>
+            </div>
+
+            <ul id="nav-list" class="hidden md:flex items-center h-full text-xs font-sans font-extrabold tracking-wider">
+                <li class="h-full flex items-center">
+                    <a href="#intro" class="riot-menu-item px-4 h-full flex items-center text-gray-300 hover:text-white hover:bg-[#282828] transition duration-150 rounded-md h-[36px] my-auto hover:border-b-2 hover:border-vlrntRed">HOME</a>
+                </li>
+                <li class="h-full flex items-center">
+                    <a href="#works" class="riot-menu-item px-4 h-full flex items-center text-gray-300 hover:text-white hover:bg-[#282828] transition duration-150 rounded-md h-[36px] my-auto hover:border-b-2 hover:border-vlrntRed">VIDEOS</a>
+                </li>
+                <li class="h-full flex items-center">
+                    <a href="#about" class="riot-menu-item px-4 h-full flex items-center text-gray-300 hover:text-white hover:bg-[#282828] transition duration-150 rounded-md h-[36px] my-auto hover:border-b-2 hover:border-vlrntRed">AGENTS</a>
+                </li>
+                <li class="h-full flex items-center">
+					<a href="#maps" class="riot-menu-item px-4 h-full flex items-center text-gray-300 hover:text-white hover:bg-[#282828] transition duration-150 rounded-md h-[36px] my-auto hover:border-b-2 hover:border-vlrntRed">MAPS</a>
+				</li>
+                <li class="h-full flex items-center">
+                    <a href="#contact" class="riot-menu-item px-4 h-full flex items-center text-gray-300 hover:text-white hover:bg-[#282828] transition duration-150 rounded-md h-[36px] my-auto hover:border-b-2 hover:border-vlrntRed">CONTACT</a>
+                </li>
+            </ul>
+        </div>          
+    </nav>
+    
+    <div id="intro" class="relative min-h-screen flex items-center justify-center pt-16" style="background: linear-gradient(180deg, rgba(17,20,26,0.3) 0%, rgba(17,20,26,0.9) 100%), url('img/utama.gif') center/cover no-repeat;">
+        <div class="container mx-auto px-6 text-center z-10 space-y-6">
+            <h1 class="text-white text-6xl md:text-9xl font-black tracking-tighter leading-none">VALORANT</h1>
+            <p class="text-gray-300 text-sm md:text-base max-w-xl mx-auto tracking-widest font-medium uppercase opacity-80">// JADILAH AGEN PERUBAHAN. TAMPILKAN DUNIAMU.</p>
+            <div class="pt-4"><a href="#works" class="vlrnt-btn-primary font-mono text-xs tracking-widest uppercase">Mulai Eksplorasi</a></div>
+        </div>         
+    </div>
+
+    <div id="works" class="py-24 bg-[#ece8e1] text-[#11141a]">
+    <div class="container mx-auto px-6">
+        <div class="flex justify-between items-end mb-12 border-b border-black/10 pb-4">
+            <h2 class="text-4xl md:text-5xl font-black tracking-tighter">VALORANT TRANSMISSIONS</h2>
+            <span class="text-[10px] font-bold text-vlrntRed tracking-widest uppercase hidden sm:block">// HOVER TO PREVIEW // CLICK TO OPEN</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            
+            <div class="group cursor-pointer video-container" data-video-id="z7oMjTZH0k4" onclick="window.open('https://youtu.be/z7oMjTZH0k4', '_blank')">
+                <div class="overflow-hidden aspect-video border border-black/5 mb-4 relative bg-black">
+                    <div class="video-overlay"></div>
+                    <img src="https://i.ytimg.com/vi/z7oMjTZH0k4/maxresdefault.jpg" class="thumb-preview" id="thumb-player1" alt="Preview 1">
+                    <div id="player1" class="player-iframe scale-105"></div>
+                </div>
+                <p class="text-[10px] font-bold text-vlrntRed mb-2 tracking-widest uppercase">Dev Updates // VALORANT</p>
+                <h3 class="text-xl font-bold tracking-tight mb-2 group-hover:text-vlrntRed transition line-clamp-2">Ranked, Modes, Agent Balance</h3>
+            </div>
+
+            <div class="group cursor-pointer video-container" data-video-id="pXqSRj-JEkA" onclick="window.open('https://youtu.be/pXqSRj-JEkA', '_blank')">
+                <div class="overflow-hidden aspect-video border border-black/5 mb-4 relative bg-black">
+                    <div class="video-overlay"></div>
+                    <img src="https://i.ytimg.com/vi/pXqSRj-JEkA/maxresdefault.jpg" class="thumb-preview" id="thumb-player2" alt="Preview 2">
+                    <div id="player2" class="player-iframe scale-105"></div>
+                </div>
+                <p class="text-[10px] font-bold text-vlrntRed mb-2 tracking-widest uppercase">Skin Reveal // Kuronami</p>
+                <h3 class="text-xl font-bold tracking-tight mb-2 group-hover:text-vlrntRed transition line-clamp-2">STORM AND SHADOW // Kuronami Trailer</h3>
+            </div>
+
+            <div class="group cursor-pointer video-container" data-video-id="JVfFX6CGHlk" onclick="window.open('https://youtu.be/JVfFX6CGHlk', '_blank')">
+                <div class="overflow-hidden aspect-video border border-black/5 mb-4 relative bg-black">
+                    <div class="video-overlay"></div>
+                    <img src="https://i.ytimg.com/vi/JVfFX6CGHlk/maxresdefault.jpg" class="thumb-preview" id="thumb-player3" alt="Preview 3">
+                    <div id="player3" class="player-iframe scale-105"></div>
+                </div>
+                <p class="text-[10px] font-bold text-vlrntRed mb-2 tracking-widest uppercase">Gameplay // New Agent</p>
+                <h3 class="text-xl font-bold tracking-tight mb-2 group-hover:text-vlrntRed transition line-clamp-2">Official Gameplay Reveal Trailer</h3>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="about" class="relative w-full min-h-screen md:h-screen flex flex-col justify-end overflow-hidden select-none bg-[#8b1e27]">
+        <div class="absolute inset-0 vlrnt-tech-circuit opacity-30 pointer-events-none z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none z-0"></div>
+        <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-[24vw] font-black tracking-tighter text-black/10 leading-none vlrnt-font pointer-events-none z-0">AGENT</div>
+        <div class="container mx-auto px-6 h-full flex flex-col justify-end relative z-20 pb-0 pt-24 md:pt-32">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end w-full h-full">
+                <div class="lg:col-span-6 text-center lg:text-left mb-12 lg:mb-24 z-30">
+                    <h2 class="text-white text-6xl md:text-8xl lg:text-[100px] font-black tracking-tighter leading-none mb-4 drop-shadow-lg">AGEN</h2>
+                    <p class="text-white text-sm md:text-base leading-relaxed font-medium tracking-wide max-w-xl mx-auto lg:mx-0 mb-8 drop-shadow-md opacity-90">Padukan keahlian taktis dengan gaya personal. Seperti Agen Valorant yang membawa keunikan tersendiri di arena.</p>
+                    <a href="https://playvalorant.com/id-id/agents/" target="_blank" class="vlrnt-btn-dark text-[11px] tracking-[0.2em] font-bold uppercase !bg-[#11141a]">Lihat Semua Agen</a>
+                </div>
+                <div class="lg:col-span-6 flex justify-center lg:justify-end items-end h-full">
+                    <img src="img/about-agents.png" alt="Valorant Agents" class="h-[55vh] md:h-[75vh] w-auto object-contain drop-shadow-2xl translate-y-1" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="maps" class="relative w-full min-h-screen flex flex-col justify-center overflow-hidden select-none bg-[#11141a] pt-20 pb-8">
+        <div class="absolute inset-0 vlrnt-tech-circuit opacity-15 pointer-events-none z-0"></div>
+        <div class="absolute inset-x-0 top-24 text-center text-[12vw] font-black tracking-tighter text-white/5 leading-none vlrnt-font pointer-events-none z-0">TACTICAL MAP</div>
+        
+        <div class="container mx-auto px-6 relative z-10 text-center mb-4">
+            <p class="text-white/30 text-[10px] font-bold tracking-[0.5em] uppercase mb-8">// CHOOSE YOUR BATTLEGROUND</p>
+        </div>
+
+        <div class="relative w-full z-10 px-4 md:px-16">
+            <button class="swiper-prev-btn absolute left-2 md:left-12 top-1/2 -translate-y-1/2 z-50 text-white/40 hover:text-vlrntRed text-5xl transition bg-transparent focus:outline-none"><i class="fas fa-angle-left"></i></button>
+            <button class="swiper-next-btn absolute right-2 md:right-12 top-1/2 -translate-y-1/2 z-50 text-white/40 hover:text-vlrntRed text-5xl transition bg-transparent focus:outline-none"><i class="fas fa-angle-right"></i></button>
+
+            <div class="swiper mapsSwiper">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-bind.jpg" class="w-full h-full object-cover" alt="Bind">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">BIND</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">DESSERT // MOROCCO</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>2.28 PLAYERS</span><span>TELEPORTERS</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-split.jpg" class="w-full h-full object-cover" alt="Split">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">SPLIT</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">METRO // JAPAN</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>5.14 PLAYERS</span><span>ELEVATOR ROPES</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-ascent.jpg" class="w-full h-full object-cover" alt="Ascent">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">ASCENT</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">CITY // ITALY</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>9.25 PLAYERS</span><span>CLOSING DOORS</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-haven.jpg" class="w-full h-full object-cover" alt="Haven">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">HAVEN</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">TEMPLE // BHUTAN</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>5.25 PLAYERS</span><span>3-SITE PROTOCOL</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-icebox.jpg" class="w-full h-full object-cover" alt="Icebox">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">ICEBOX</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">TUNDRA // RUSSIA</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>3.25 PLAYERS</span><span>VERTICAL ZIPLINE</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-fracture.jpg" class="w-full h-full object-cover" alt="Fracture">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">FRACTURE</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">CANYON // USA</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>4.10 PLAYERS</span><span>H-SHAPE DESIGN</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-lotus.jpg" class="w-full h-full object-cover" alt="Lotus">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">LOTUS</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">RUINS // INDIA</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>6.12 PLAYERS</span><span>ROTATING DOORS</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-abyss.jpg" class="w-full h-full object-cover" alt="Abyss">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">ABYSS</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">PITFALL // NORWAY</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>4.18 PLAYERS</span><span>NO-WALL LEDGES</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="map-card overflow-hidden rounded-sm">
+                            <div class="aspect-[3/4] w-full relative">
+                                <img src="img/map-corrode.jpg" class="w-full h-full object-cover" alt="Corrode">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#11141a] via-transparent to-transparent"></div>
+                            </div>
+                            <div class="p-5 bg-[#161920]">
+                                <h3 class="text-3xl font-black italic text-white leading-none">CORRODE</h3>
+                                <p class="text-[9px] text-vlrntRed font-bold tracking-widest uppercase mt-1">LAB // UNKNOWN</p>
+                                <div class="pt-3 mt-3 border-t border-white/5 flex justify-between text-[8px] text-white/40 font-mono"><span>CLASSIFIED</span><span>RADIANITE LEAK</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full max-w-5xl mx-auto px-6 relative z-10 mt-4">
+            <div class="border border-white/10 bg-black/40 backdrop-blur-md p-4 rounded-xl flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-2 h-2 rounded-full bg-vlrntRed animate-pulse"></div>
+                    <p class="text-xs font-bold tracking-widest text-white/80 uppercase">TACTICAL RADAR SYSTEM ACTIVE</p>
+                </div>
+                <div class="flex gap-1"><span class="w-6 h-1 bg-vlrntRed"></span><span class="w-6 h-1 bg-white/10"></span><span class="w-6 h-1 bg-white/10"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact" class="py-20 bg-[#ece8e1] text-[#11141a] min-h-screen flex flex-col justify-between">
+        <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 my-auto items-center">
+            <div class="space-y-6">
+                <div>
+                    <h2 class="text-5xl md:text-7xl font-black italic tracking-tighter">MARK THE MAP</h2>
+                    <p class="text-xs font-bold text-vlrntRed tracking-widest mt-2">// HUBUNGI KOORDINAT</p>
+                </div>
+                <p class="text-gray-700 text-sm leading-relaxed font-light border-l-4 border-vlrntRed pl-6">
+                    Kirimkan pesan enkripsi Anda untuk kolaborasi proyek taktis atau diskusi pengerjaan antarmuka web.
+                </p>
+                <div class="space-y-3 pt-4 text-xs font-bold font-mono tracking-widest uppercase text-neutral-800">
+                    <p><i class="fas fa-map-marker-alt text-vlrntRed mr-3"></i> Yogyakarta, Indonesia</p>
+                    <p><i class="fas fa-envelope text-vlrntRed mr-3"></i> akuanakmansa@gmail.com</p>
+                </div>
+            </div>
+
+            <div class="bg-[#11141a] text-white p-8 md:p-10 relative shadow-2xl rounded-sm">
+                <div class="absolute top-0 left-0 w-4 h-4 bg-vlrntRed"></div>
+                <h3 class="text-xl font-bold mb-6 uppercase tracking-widest text-white/90">// Kirim Pesan Taktis</h3>
+                <form class="space-y-6">
+                    <div><input type="text" class="vlrnt-input font-mono text-xs uppercase" placeholder="Identitas Agen" required /></div>
+                    <div><input type="email" class="vlrnt-input font-mono text-xs uppercase" placeholder="Email Node" required /></div>
+                    <div><textarea rows="3" class="vlrnt-input font-mono text-xs uppercase resize-none" placeholder="Isi Transmisi..." required></textarea></div>
+                    <button type="submit" class="vlrnt-btn-primary tracking-widest text-[10px] w-full uppercase">Transmisikan Data</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="w-full mt-12">
+            <div class="container mx-auto px-6 pt-6 border-t border-black/10 text-center">
+                <p class="text-[11px] text-gray-600 font-mono tracking-[0.15em] uppercase">
+                    by : Daffa Rifqy Amiza. All rights reserved. <br class="sm:hidden"> 
+                    <span class="text-vlrntRed font-bold ml-1">Design: playvalorant.com</span>
+                </p>
+            </div>
+        </div>
+    </div>   
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+        // --- YouTube API ---
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        var players = {};
+        function onYouTubeIframeAPIReady() {
+            const vids = {player1:'z7oMjTZH0k4', player2:'pXqSRj-JEkA', player3:'JVfFX6CGHlk'};
+            for(let id in vids) {
+                players[id] = new YT.Player(id, { videoId: vids[id], playerVars: { 'autoplay':0, 'controls':0, 'mute':1 } });
+            }
+        }
+
+        $(function(){
+            $('#menu-toggle').click(function(){ $('#nav-list').toggleClass('hidden').toggleClass('flex'); });
+            
+            $('.video-container').hover(
+                function() { $(this).find('.thumb-preview').css('opacity','0'); let id = $(this).find('.player-iframe').attr('id'); if(players[id]) players[id].playVideo(); }, 
+                function() { $(this).find('.thumb-preview').css('opacity','1'); let id = $(this).find('.player-iframe').attr('id'); if(players[id]) players[id].pauseVideo(); }
+            );
+
+            // --- INISIALISASI SWIPER AMAN DAN HALUS ---
+            const swiper = new Swiper('.mapsSwiper', {
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                
+                loop: true,
+                loopedSlides: 4,               // Jumlah kloningan dasar bawaan kodemu
+                loopAdditionalSlides: 4,       // SOLUSI UTAMA: Menyediakan cadangan ekstra agar saat mentok kanan tidak melompat patah
+                speed: 500,                    // Kecepatan standar yang sangat mulus
+                
+                coverflowEffect: {
+                    rotate: 0,
+                    stretch: -15,
+                    depth: 180,
+                    modifier: 1,
+                    slideShadows: false,
+                },
+                navigation: {
+                    nextEl: '.swiper-next-btn',
+                    prevEl: '.swiper-prev-btn',
+                },
+                slideToClickedSlide: true
+            });
+        });
+    </script>
+	<div class="mt-12 text-center border-t border-white/10 pt-8 px-6">
+    <p class="text-[10px] text-gray-500 uppercase tracking-widest leading-relaxed">
+        DISCLAIMER: This project is a non-commercial, fan-made educational task.<br>
+        All VALORANT assets, videos, and trademarks are the property of Riot Games.<br>
+        Please visit the official source for original content: 
+        <a href="https://playvalorant.com" class="text-vlrntRed hover:underline" target="_blank">playvalorant.com</a>
+    </p>
+</div>
+</body>
+</html>
